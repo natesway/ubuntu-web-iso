@@ -11,11 +11,11 @@ enter: .edit.timestamp
 	cp -r build edit/
 	cp extract-cd/casper/initrd edit/boot/initrd.fromiso
 	cp extract-cd/casper/vmlinuz edit/boot/vmlinuz.fromiso
-	mount -o bind /run/ edit/run
-	mount -o bind /dev/ edit/dev
-	chroot edit /build/build.sh
-	umount edit/dev
-	umount edit/run
+	sudo mount -o bind /run/ edit/run
+	sudo -o bind /dev/ edit/dev
+	sudo chroot edit /build/build.sh
+	sudo umount edit/dev
+	sudo umount edit/run
 	rm edit/etc/hosts
 	- mv .hosts.backup edit/etc/hosts || true
 	cp edit/boot/vmlinuz extract-cd/casper/vmlinuz
@@ -27,11 +27,11 @@ enter: .edit.timestamp
 
 .edit.timestamp:
 	mkdir -p mnt
-	mount -o loop ubuntu.iso mnt
+	sudo mount -o loop ubuntu.iso mnt
 	unsquashfs mnt/casper/filesystem.squashfs
 	mv squashfs-root edit
 	cp -r mnt/ extract-cd/ && rm -f extract-cd/filesystem.squashfs extract-cd/filesystem.squashfs.gpg
-	umount mnt
+	sudo umount mnt
 	rmdir mnt
 	touch .edit.timestamp
 
@@ -40,7 +40,7 @@ enter: .edit.timestamp
 
 extract-cd/casper/filesystem.manifest: .edit.timestamp .enter.timestamp
 	chmod +w extract-cd/casper/filesystem.manifest
-	chroot edit dpkg-query -W --showformat='$${Package} $${Version}\n' > extract-cd/casper/filesystem.manifest
+	sudo chroot edit dpkg-query -W --showformat='$${Package} $${Version}\n' > extract-cd/casper/filesystem.manifest
 
 extract-cd/casper/filesystem.squashfs: extract-cd/casper/filesystem.manifest
 	- rm extract-cd/casper/filesystem.squashfs
