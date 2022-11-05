@@ -4,6 +4,6 @@ set -e
 
 source fetch_build.conf
 
-[ -z "$DOWNLOAD_ISO" ] && wget -O ubuntu.iso "https://releases.ubuntu.com/$CODENAME/ubuntu-$RELEASE-desktop-$ARCH.iso" || wget -O ubuntu.iso "$DOWNLOAD_ISO"
+[ -z "$DOWNLOAD_ISO" ] && wget -O ubuntu.iso "https://releases.ubuntu.com/22.04/ubuntu-22.04.1-desktop-amd64.iso" || wget -O ubuntu.iso "$DOWNLOAD_ISO"
 
 make
